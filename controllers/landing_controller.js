@@ -32,13 +32,8 @@ const getByDate = async (query, res) => {
 
 
 const getByMass = async (req, res) => {
-    try {
-        if (req.params.mass) {
-            res.status(202).json({ message: 'dentro getByMass' })
-        }
-    } catch (error) {
-        res.status(400).json({ message: error });
-    }
+    const allLandings = await landingDB.getByMass(parseInt(req.params.mass));
+    res.status(200).json(allLandings); 
 }
 
 

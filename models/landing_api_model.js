@@ -8,7 +8,7 @@ const getByMassAprox = async (min_mass) => {
             {
                 '$project':
                 {
-                    '_id' : 0 ,
+                    '_id': 0,
                     'name': 1,
                     'mass': 1
                 }
@@ -16,7 +16,8 @@ const getByMassAprox = async (min_mass) => {
             {
                 '$match':
                 {
-                    '$expr': {
+                    '$expr':
+                    {
                         '$gte':
                             [
                                 {
@@ -38,8 +39,38 @@ const getByMassAprox = async (min_mass) => {
 
 // GET para obtener nombre y masa de uno o más meteoritos cuya masa sea la especificada (route params)​
 // Ejemplo: /astronomy/landings/mass/200000​
-const getByMass = async () => {
-    return 'getByMass';
+const getByMass = async (exactMass) => {
+    try {
+        const agg = [
+            {
+                '$project':
+                {
+                    '_id': 0,
+                    'name': 1,
+                    'mass': 1
+                }
+            },
+            {
+                '$match':
+                {
+                    '$expr':
+                    {
+                        '$eq':
+                            [
+                                {
+                                    '$toDecimal': '$mass'
+                                }, exactMass
+                            ]
+                    }
+                }
+            }
+        ];
+        const allLandings = Landing.aggregate(agg);
+        return allLandings;
+    } catch (error) {
+        console.log(err);
+        throw err;
+    }
 }
 
 
