@@ -4,7 +4,7 @@ const morgan = require('morgan');
 const { app: { port } } = require('./configs/env_config');
 const connectMongoDB = require('./configs/mongodb_config');
 
-//const nombreRouter = require('./routes/nombre_route');
+const routerAPI = require('./routes/routes');
 
 const app = express();
 
@@ -14,6 +14,7 @@ app.use(express.urlencoded({ extended: true }));
 //app.use(morgan(':method :host :status :param[id] :res[content-length] - :response-time ms :body'));
 //app.use(morgan('tiny'));
 
+app.use('/api', routerAPI);
 
 /**
  * Función inicial que conecta a la BBDD y lanza el servidor
