@@ -1,4 +1,4 @@
-const mongoose = require('../configs/mongodb_config');
+const mongoose = require('mongoose');
 
 /* {
     "designation": "(2010 YD3)",

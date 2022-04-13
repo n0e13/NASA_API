@@ -1,4 +1,5 @@
-const mongoose = require('../configs/mongodb_config');
+const mongoose = require('mongoose');
+
 /* {
     "name": "Agen",
     "id": "392",

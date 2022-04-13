@@ -1,48 +1,66 @@
 const neaAPI = require('../models/nea_api_model');
 
-const getByClass = async (req, res) => {
+const getByQuery = async (req, res) => {
     try {
-        console.log(req.params.class);
+        if (req.query.class) {
+            getByClass(req.query.class, res);
+        } else if (req.query.to || req.query.from) {
+            getByDate(req.query, res);
+        }
     } catch (error) {
-        console.log(error)
+        res.status(400).json({ message: error });
     }
 }
 
-const getByDate = async (req, res) => {
+const getByClass = async(nea_class, res) => {
     try {
-        console.log(req.params.date);
+        res.status(202).json({ message: 'dentro getByClass' })
     } catch (error) {
-        console.log(error)
+        res.status(400).json({ message: error });
+    }
+}
+
+const getByDate = async (query, res) => {
+    if (query.to && query.from) {
+        res.status(202).json({ message: 'dentro get by date con to y from' });
+    } else if (query.from) {
+        res.status(202).json({ message: 'dentro get by date con from' });
+    } else {
+        res.status(202).json({ message: 'dentro get by date con to' });
     }
 }
 
 const createNea = async (req, res) => {
     try {
-        console.log('creo nea');
+        res.status(202).json({ message: 'dentro createNea' })
+
     } catch (error) {
-        console.log(error)
+        res.status(400).json({ message: error });
     }
 }
 
 const updateNea = async (req, res) => {
     try {
-        console.log(req.params.designation);
+        if (req.params.designation) {
+            res.status(202).json({ message: 'dentro updateNea' })
+        }
     } catch (error) {
-        console.log(error)
+        res.status(400).json({ message: error });
     }
 }
 
 const deleteNea = async (req, res) => {
     try {
-        console.log(req.params.designation);
+        if (req.params.designation) {
+            res.status(202).json({ message: 'dentro deleteNea' })
+        }
     } catch (error) {
-        console.log(error)
+        res.status(400).json({ message: error });
     }
 }
 
 const nea = {
-    getByClass,
-    getByDate,
+    getByQuery,
     createNea,
     updateNea,
     deleteNea

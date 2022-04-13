@@ -1,19 +1,22 @@
 const express = require('express');
-const morgan = require('morgan');
 
 const { app: { port } } = require('./configs/env_config');
 const connectMongoDB = require('./configs/mongodb_config');
+const morgan = require('./configs/morgan_config');
 
-const routerAPI = require('./routes/routes');
+const landingRouter = require('./routes/lading_routes');
+const neaRouter = require('./routes/nea_routes');
 
 const app = express();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.use(morgan(':method :host :status :param[id] :res[content-length] - :response-time ms :body'));
+app.use(morgan(':method / :host / :status / :query / :param / :res[content-length] / :response-time ms / :body'));
 
-app.use('/api', routerAPI);
+app.use('/api/astronomy/landings', landingRouter);
+app.use('/api/astronomy/neas', neaRouter);
+
 
 /**
  * Función inicial que conecta a la BBDD y lanza el servidor
