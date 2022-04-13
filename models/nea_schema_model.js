@@ -12,3 +12,24 @@ const mongoose = require('../configs/mongodb_config');
     "pha": "N",
     "orbit_class": "Amor"
   } */
+
+  const objectSchema = {
+    designation: String,
+    discovery_date: String,
+    h_mag: String,
+    moid_au: String,
+    q_au_1: String,
+    q_au_2: String,
+    period_yr: String,
+    i_deg: String,
+    pha: String,
+    orbit_class: String
+};
+
+// Crear el esquema
+const neaSchema = mongoose.Schema(objectSchema);
+
+// Crear el modelo
+const Nea = mongoose.model('Nea', neaSchema);
+
+module.exports = Nea;
