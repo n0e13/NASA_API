@@ -1,0 +1,1 @@
+const Landing = require('./landing_schema_model');

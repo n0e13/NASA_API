@@ -1,0 +1,1 @@
+const landingAPI = require('../models/landing_api_model');

@@ -1,0 +1,1 @@
+const mongoose = require('../configs/mongodb_config');

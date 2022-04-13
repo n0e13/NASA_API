@@ -1,0 +1,1 @@
+const neaAPI = require('../models/nea_api_model');
