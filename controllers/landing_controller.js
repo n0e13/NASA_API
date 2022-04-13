@@ -1,76 +1,99 @@
 const landingAPI = require('../models/landing_api_model');
 
-const getByMassAprox = async () => {
+const getByQuery = async (req, res) => {
     try {
-        console.log(req.params.minimum_mass);
+        if (req.query.minimum_mass) {
+            getByMassAprox(req.query.minimum_mass, res);
+        } else if (req.query.to || req.query.from) {
+            getByDate(req.query, res);
+        }
     } catch (error) {
-        console.log(error)
+        res.status(400).json({ message: error });
+    }
+}
+
+const getByMassAprox = async (min_mass, res) => {
+    try {
+        if (min_mass) {
+
+        }
+    } catch (error) {
+        res.status(400).json({ message: error });
+    }
+}
+
+const getByDate = async (query, res) => {
+    if (query.to && query.from) {
+        res.status(202).json({ message: 'dentro get by date con to y from' });
+    } else if (query.from) {
+        res.status(202).json({ message: 'dentro get by date con from' });
+    } else {
+        res.status(202).json({ message: 'dentro get by date con to' });
     }
 }
 
 
-const getByMass = async () => {
+const getByMass = async (req, res) => {
     try {
-        console.log(req.params.mass);
+        if (req.params.mass) {
+            res.status(202).json({ message: 'dentro getByMass' })
+        }
     } catch (error) {
-        console.log(error)
+        res.status(400).json({ message: error });
     }
 }
 
 
-const getByClass = async () => {
+const getByClass = async (req, res) => {
     try {
-        console.log(req.params.class);
+        if (req.params.class) {
+            res.status(202).json({ message: 'dentro getByClass' })
+        }
     } catch (error) {
-        console.log(error)
+        res.status(400).json({ message: error });
     }
 }
 
 
-const getByDate = async () => {
+const createLanding = async (req, res) => {
     try {
-        console.log(req.params.from);
+        res.status(202).json({ message: 'dentro createLanding' })
+
     } catch (error) {
-        console.log(error)
+        res.status(400).json({ message: error });
     }
 }
 
 
-const createLanding = async () => {
+const updateLanding = async (req, res) => {
     try {
-        console.log('creo landing');
+        if (req.params.id) {
+            res.status(202).json({ message: 'dentro updateLanding' })
+        }
     } catch (error) {
-        console.log(error)
+        res.status(400).json({ message: error });
     }
 }
 
 
-const updateLanding = async () => {
+const deleteLanding = async (req, res) => {
     try {
-        console.log(req.params.id);
+        if (req.params.id) {
+            res.status(202).json({ message: 'dentro deleteLanding' })
+        }
     } catch (error) {
-        console.log(error)
-    }
-}
-
-
-const deleteLanding = async () => {
-    try {
-        console.log(req.params.id);
-    } catch (error) {
-        console.log(error)
+        res.status(400).json({ message: error });
     }
 }
 
 
 const landing = {
-    getByMassAprox,
+    getByQuery,
     getByMass,
     getByClass,
-    getByDate,
     createLanding,
     updateLanding,
     deleteLanding
 };
 
-module.exports = lading;
+module.exports = landing;
