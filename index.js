@@ -4,6 +4,8 @@ const { app: { port } } = require('./configs/env_config');
 const connectMongoDB = require('./configs/mongodb_config');
 const morgan = require('./configs/morgan_config');
 
+const notFound = require('./middlewares/notFound');
+
 const landingRouter = require('./routes/lading_routes');
 const neaRouter = require('./routes/nea_routes');
 
@@ -17,7 +19,7 @@ app.use(morgan(':method / :host / :status / :query / :param / :res[content-lengt
 app.use('/api/astronomy/landings', landingRouter);
 app.use('/api/astronomy/neas', neaRouter);
 
-
+app.use(notFound);
 /**
  * Función inicial que conecta a la BBDD y lanza el servidor
  * @async

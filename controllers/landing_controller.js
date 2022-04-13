@@ -1,25 +1,23 @@
-const landingAPI = require('../models/landing_api_model');
+const landingDB = require('../models/landing_api_model');
 
 const getByQuery = async (req, res) => {
-    try {
+    if (Object.keys(req.query).length !== 0) {
         if (req.query.minimum_mass) {
             getByMassAprox(req.query.minimum_mass, res);
-        } else if (req.query.to || req.query.from) {
+        } else if (req.query.from || req.query.to) {
             getByDate(req.query, res);
         }
-    } catch (error) {
-        res.status(400).json({ message: error });
+        else {
+            res.status(400).json({ message: 'Parámetros de consulta incorrectos' });
+        }
+    } else {
+        res.status(400).json({ message: 'No hay parámetros' });
     }
 }
 
 const getByMassAprox = async (min_mass, res) => {
-    try {
-        if (min_mass) {
-
-        }
-    } catch (error) {
-        res.status(400).json({ message: error });
-    }
+    const allLandings = await landingDB.getByMassAprox(parseInt(min_mass));
+    res.status(200).json(allLandings); 
 }
 
 const getByDate = async (query, res) => {

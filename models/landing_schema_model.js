@@ -13,24 +13,27 @@ const mongoose = require('mongoose');
     "geolocation": { "latitude": "44.21667", "longitude": "0.61667" }
   } */
 
-const objectSchema = {
-    name: String,
-    id: String,
-    nametype: String,
-    recclass: String,
-    mass: String,
-    fall: String,
-    year: String,
-    reclat: String,
-    reclong: String,
-    geolocation: {
-        latitude: String,
-        longitude: String
+const landingSchema = new mongoose.Schema(
+    {
+        name: String,
+        id: String,
+        nametype: String,
+        recclass: String,
+        mass: String,
+        fall: String,
+        year: String,
+        reclat: String,
+        reclong: String,
+        geolocation: {
+            latitude: String,
+            longitude: String
+        }
+    },
+    {
+        collection: 'landings'
     }
-};
+);
 
-// Crear el esquema
-const landingSchema = mongoose.Schema(objectSchema);
 
 // Crear el modelo
 const Landing = mongoose.model('Landing', landingSchema);

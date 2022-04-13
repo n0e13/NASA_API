@@ -2,8 +2,37 @@ const Landing = require('./landing_schema_model');
 
 // GET para obtener nombre y masa de todos aquellos meteoritos cuya masa sea igual o superior a una masa (gr) dada (con query parameters)​
 // Ejemplo: /astronomy/landings?minimum_mass=200000​
-const getByMassAprox = async () => {
-    return 'getByMassAprox';
+const getByMassAprox = async (min_mass) => {
+    try {
+        const agg = [
+            {
+                '$project':
+                {
+                    '_id' : 0 ,
+                    'name': 1,
+                    'mass': 1
+                }
+            },
+            {
+                '$match':
+                {
+                    '$expr': {
+                        '$gte':
+                            [
+                                {
+                                    '$toDecimal': '$mass'
+                                }, min_mass
+                            ]
+                    }
+                }
+            }
+        ];
+        const allLandings = Landing.aggregate(agg);
+        return allLandings;
+    } catch (error) {
+        console.log(err);
+        throw err;
+    }
 }
 
 
