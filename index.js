@@ -11,8 +11,7 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-//app.use(morgan(':method :host :status :param[id] :res[content-length] - :response-time ms :body'));
-//app.use(morgan('tiny'));
+app.use(morgan(':method :host :status :param[id] :res[content-length] - :response-time ms :body'));
 
 app.use('/api', routerAPI);
 
