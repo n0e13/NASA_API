@@ -16,33 +16,54 @@ const getByQuery = async (req, res) => {
 }
 
 const getByMassAprox = async (min_mass, res) => {
-    const allLandings = await landingDB.getByMassAprox(parseInt(min_mass));
-    res.status(200).json(allLandings); 
+    try {
+        const allLandings = await landingDB.getByMassAprox(parseInt(min_mass));
+        res.status(200).json(allLandings);
+    }
+    catch (error) {
+        res.status(400).json({ message: error });
+    }
 }
 
 const getByDate = async (query, res) => {
-    const allLandings = await landingDB.getByDate(parseInt(query.from), parseInt(query.to));
-    res.status(200).json(allLandings);
+    try {
+        const allLandings = await landingDB.getByDate(parseInt(query.from), parseInt(query.to));
+        res.status(200).json(allLandings);
+    }
+    catch (error) {
+        res.status(400).json({ message: error });;
+    }
 }
 
 
 const getByMass = async (req, res) => {
-    const allLandings = await landingDB.getByMass(parseInt(req.params.mass));
-    res.status(200).json(allLandings); 
+    try {
+        const allLandings = await landingDB.getByMass(parseInt(req.params.mass));
+        res.status(200).json(allLandings);
+    }
+    catch (error) {
+        res.status(400).json({ message: error });
+    }
 }
 
 
 const getByClass = async (req, res) => {
-    const allLandings = await landingDB.getByClass(req.params.class);
-    res.status(200).json(allLandings); 
+    try {
+        const allLandings = await landingDB.getByClass(req.params.class);
+        res.status(200).json(allLandings);
+    }
+    catch (error) {
+        res.status(400).json({ message: error });
+    }
 }
 
 
 const createLanding = async (req, res) => {
     try {
-        res.status(202).json({ message: 'dentro createLanding' })
-
-    } catch (error) {
+        await landingDB.createLanding(req.body);
+        res.status(201).json({ message: 'Landing creada correctamente' });
+    }
+    catch (error) {
         res.status(400).json({ message: error });
     }
 }

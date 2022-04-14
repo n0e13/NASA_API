@@ -75,40 +75,45 @@ const getByClass = async (exactClass) => {
 // /astronomy/landings?to=1990
 // El mismo endpoint deberá ser compatible con las 3 formas
 const getByDate = async (fromYear, toYear) => {
-    const agg = [
-        {
-            '$project': {
-                '_id': 0,
-                'name': 1,
-                'mass': 1,
-                'year': {
-                    '$substr': [
-                        '$year', 0, 4
-                    ]
+    try {
+        const agg = [
+            {
+                '$project': {
+                    '_id': 0,
+                    'name': 1,
+                    'mass': 1,
+                    'year': {
+                        '$substr': [
+                            '$year', 0, 4
+                        ]
+                    }
                 }
             }
-        }
-    ];
+        ];
 
-    const allLandings = await Landing.aggregate(agg);
-    let inDate = [];
-    await allLandings.forEach(landingItem => {
-        if (fromYear && toYear) {
-            if ((parseInt(landingItem.year) >= parseInt(fromYear)) && (parseInt(landingItem.year) <= parseInt(toYear))) {
-                inDate.push(landingItem);
+        const allLandings = await Landing.aggregate(agg);
+        let inDate = [];
+        await allLandings.forEach(landingItem => {
+            if (fromYear && toYear) {
+                if ((parseInt(landingItem.year) >= parseInt(fromYear)) && (parseInt(landingItem.year) <= parseInt(toYear))) {
+                    inDate.push(landingItem);
+                }
+            } else if (fromYear) {
+                if (parseInt(landingItem.year) >= parseInt(fromYear)) {
+                    inDate.push(landingItem);
+                }
+            } else {
+                if (parseInt(landingItem.year) <= parseInt(toYear)) {
+                    inDate.push(landingItem);
+                }
             }
-        } else if (fromYear) {
-            if (parseInt(landingItem.year) >= parseInt(fromYear)) {
-                inDate.push(landingItem);
-            }
-        } else {
-            if (parseInt(landingItem.year) <= parseInt(toYear)) {
-                inDate.push(landingItem);
-            }
-        }
-    });
-    
-    return inDate;
+        });
+
+        return inDate;
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
 }
 
 
@@ -126,8 +131,14 @@ const getByDate = async (fromYear, toYear) => {
   "geolocation": { "latitude": "44.21667", "longitude": "0.61667" }
 },
 Ejemplo: /astronomy/landings/create */
-const createLanding = async () => {
-    return 'createLanding';
+const createLanding = async (landing) => {
+    try {
+        const newLanding = new Landing(landing);
+        await Landing.create(newLanding);
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
 }
 
 
