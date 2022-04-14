@@ -170,8 +170,13 @@ const updateLanding = async (landing) => {
 
 // DELETE Para borrar un landing en el sistema. Búsqueda para borrar por ID.
 // Ejemplo: /astronomy/landings/delete​
-const deleteLanding = async () => {
-    return 'deleteLanding';
+const deleteLanding = async (landing) => {
+    try {
+        await Landing.findOneAndDelete({ id: landing.id }); 
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
 }
 
 const landingAPI = {
