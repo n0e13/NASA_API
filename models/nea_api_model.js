@@ -2,8 +2,25 @@ const Nea = require('./nea_schema_model');
 
 // GET para obtener la designación y el período anual en base a la clase orbital del asteroide (con query params)​
 // Ejemplo: /astronomy/neas?class=aten​
-const getByClass = async () => {
-    return 'getByClass';
+const getByClass = async (orbit) => {
+    try {
+        const agg = [{
+            '$project': {
+                '_id': 0,
+                'designation': 1,
+                'period_yr': 1,
+                'orbit_class': 1
+            }
+        }, {
+            '$match': { '$expr': { '$eq': ['$orbit_class', orbit] } }
+        }
+        ]
+        const allNeas = await Nea.aggregate(agg);
+        return allNeas;
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
 }
 
 // GET para obtener designación, fecha y período anual de todos los asteroides que cumplan el filtro de fechas dadas​
@@ -60,7 +77,7 @@ const createNea = async (nea) => {
 const updateNea = async (nea) => {
     try {
         const newNea = Nea(nea);
-        const oldNea = await Nea.findOne({ designation: nea.designation }); 
+        const oldNea = await Nea.findOne({ designation: nea.designation });
         oldNea.overwrite(newNea);
         oldNea.save();
     } catch (error) {
@@ -73,7 +90,7 @@ const updateNea = async (nea) => {
 // Ejemplo: /astronomy/neas/delete
 const deleteNea = async (nea) => {
     try {
-        await Nea.findOneAndDelete({ designation: nea.designation }); 
+        await Nea.findOneAndDelete({ designation: nea.designation });
     } catch (error) {
         console.log(error);
         throw error;

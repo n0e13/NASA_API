@@ -16,8 +16,11 @@ const getByQuery = async (req, res) => {
 
 const getByClass = async (nea_class, res) => {
     try {
-        res.status(202).json({ message: 'dentro getByClass' })
-    } catch (error) {
+        console.log(nea_class);
+        const allNeas = await neaBD.getByClass(nea_class);
+        res.status(200).json(allNeas);
+    }
+    catch (error) {
         res.status(400).json({ message: error });
     }
 }
