@@ -13,7 +13,7 @@ routes.get('', getByQuery);
 routes.get('/mass/:mass', getByMass);
 routes.get('/class/:class', getByClass);
 routes.post('/create', createLanding);
-routes.patch('/edit/:id', updateLanding);
-routes.delete('/delete/:id', deleteLanding);
+routes.patch('/edit/', updateLanding);
+routes.delete('/delete/', deleteLanding);
 
 module.exports = routes;

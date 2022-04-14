@@ -2,22 +2,70 @@ const Landing = require('./landing_schema_model');
 
 // GET para obtener nombre y masa de todos aquellos meteoritos cuya masa sea igual o superior a una masa (gr) dada (con query parameters)​
 // Ejemplo: /astronomy/landings?minimum_mass=200000​
-const getByMassAprox = async () => {
-    return 'getByMassAprox';
+const getByMassAprox = async (min_mass) => {
+    try {
+        const agg = [{
+            '$project': {
+                '_id': 0,
+                'name': 1,
+                'mass': 1
+            }
+        }, {
+            '$match': { '$expr': { '$gte': [{ '$toDecimal': '$mass' }, min_mass] } }
+        }
+        ];
+        const allLandings = await Landing.aggregate(agg);
+        return allLandings;
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
 }
 
 
 // GET para obtener nombre y masa de uno o más meteoritos cuya masa sea la especificada (route params)​
 // Ejemplo: /astronomy/landings/mass/200000​
-const getByMass = async () => {
-    return 'getByMass';
+const getByMass = async (exactMass) => {
+    try {
+        const agg = [{
+            '$project': {
+                '_id': 0,
+                'name': 1,
+                'mass': 1
+            }
+        }, {
+            '$match': { '$expr': { '$eq': [{ '$toDecimal': '$mass' }, exactMass] } }
+        }
+        ];
+        const allLandings = await Landing.aggregate(agg);
+        return allLandings;
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
 }
 
 
 // GET para obtener los nombres y clase de aquellos meteoritos cuya clase sea la registrada (route params)​
 // Ejemplo: /astronomy/landings/class/L6​
-const getByClass = async () => {
-    return 'getByClass';
+const getByClass = async (exactClass) => {
+    try {
+        const agg = [{
+            '$project': {
+                '_id': 0,
+                'name': 1,
+                'recclass': 1
+            }
+        }, {
+            '$match': { '$expr': { '$eq': ['$recclass', exactClass] } }
+        }
+        ];
+        const allLandings = await Landing.aggregate(agg);
+        return allLandings;
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
 }
 
 
@@ -26,8 +74,46 @@ const getByClass = async () => {
 // /astronomy/landings?from=1960
 // /astronomy/landings?to=1990
 // El mismo endpoint deberá ser compatible con las 3 formas
-const getByDate = async () => {
-    return 'getByDate';
+const getByDate = async (fromYear, toYear) => {
+    try {
+        const agg = [
+            {
+                '$project': {
+                    '_id': 0,
+                    'name': 1,
+                    'mass': 1,
+                    'year': {
+                        '$substr': [
+                            '$year', 0, 4
+                        ]
+                    }
+                }
+            }
+        ];
+
+        const allLandings = await Landing.aggregate(agg);
+        let inDate = [];
+        await allLandings.forEach(landingItem => {
+            if (fromYear && toYear) {
+                if ((parseInt(landingItem.year) >= parseInt(fromYear)) && (parseInt(landingItem.year) <= parseInt(toYear))) {
+                    inDate.push(landingItem);
+                }
+            } else if (fromYear) {
+                if (parseInt(landingItem.year) >= parseInt(fromYear)) {
+                    inDate.push(landingItem);
+                }
+            } else {
+                if (parseInt(landingItem.year) <= parseInt(toYear)) {
+                    inDate.push(landingItem);
+                }
+            }
+        });
+
+        return inDate;
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
 }
 
 
@@ -45,8 +131,14 @@ const getByDate = async () => {
   "geolocation": { "latitude": "44.21667", "longitude": "0.61667" }
 },
 Ejemplo: /astronomy/landings/create */
-const createLanding = async () => {
-    return 'createLanding';
+const createLanding = async (landing) => {
+    try {
+        const newLanding = new Landing(landing);
+        await Landing.create(newLanding);
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
 }
 
 
@@ -64,14 +156,27 @@ const createLanding = async () => {
   "geolocation": { "latitude": "50.95", "longitude": "31.81667" }
 },
 Ejemplo: /astronomy/landings/edit */
-const updateLanding = async () => {
-    return 'updateLanding';
+const updateLanding = async (landing) => {
+    try {
+        const newLanding = Landing(landing);
+        const oldLanding = await Landing.findOne({ id: landing.id }); 
+        oldLanding.overwrite(newLanding);
+        oldLanding.save();
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
 }
 
 // DELETE Para borrar un landing en el sistema. Búsqueda para borrar por ID.
 // Ejemplo: /astronomy/landings/delete​
-const deleteLanding = async () => {
-    return 'deleteLanding';
+const deleteLanding = async (landing) => {
+    try {
+        await Landing.findOneAndDelete({ id: landing.id }); 
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
 }
 
 const landingAPI = {

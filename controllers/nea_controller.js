@@ -1,18 +1,18 @@
 const neaAPI = require('../models/nea_api_model');
 
 const getByQuery = async (req, res) => {
-    try {
+    if (Object.keys(req.query).length !== 0) {
         if (req.query.class) {
             getByClass(req.query.class, res);
-        } else if (req.query.to || req.query.from) {
+        } else if (req.query.from || req.query.to) {
             getByDate(req.query, res);
         }
-    } catch (error) {
-        res.status(400).json({ message: error });
+    } else {
+        res.status(400).json({ message: 'No hay parámetros' });
     }
 }
 
-const getByClass = async(nea_class, res) => {
+const getByClass = async (nea_class, res) => {
     try {
         res.status(202).json({ message: 'dentro getByClass' })
     } catch (error) {

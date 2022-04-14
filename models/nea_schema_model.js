@@ -13,7 +13,8 @@ const mongoose = require('mongoose');
     "orbit_class": "Amor"
   } */
 
-  const objectSchema = {
+const neaSchema = new mongoose.Schema(
+  {
     designation: String,
     discovery_date: String,
     h_mag: String,
@@ -24,10 +25,12 @@ const mongoose = require('mongoose');
     i_deg: String,
     pha: String,
     orbit_class: String
-};
+  },
+  {
+    collection: 'neas'
+  }
+);
 
-// Crear el esquema
-const neaSchema = mongoose.Schema(objectSchema);
 
 // Crear el modelo
 const Nea = mongoose.model('Nea', neaSchema);
