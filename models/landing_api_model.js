@@ -76,8 +76,37 @@ const getByMass = async (exactMass) => {
 
 // GET para obtener los nombres y clase de aquellos meteoritos cuya clase sea la registrada (route params)​
 // Ejemplo: /astronomy/landings/class/L6​
-const getByClass = async () => {
-    return 'getByClass';
+const getByClass = async (exactClass) => {
+    try {
+        const agg = [
+            {
+                '$project':
+                {
+                    '_id': 0,
+                    'name': 1,
+                    'recclass': 1
+                }
+            },
+            {
+                '$match':
+                {
+                    '$expr':
+                    {
+                        '$eq':
+                            [
+                                '$recclass',
+                                exactClass
+                            ]
+                    }
+                }
+            }
+        ];
+        const allLandings = Landing.aggregate(agg);
+        return allLandings;
+    } catch (error) {
+        console.log(err);
+        throw err;
+    }
 }
 
 

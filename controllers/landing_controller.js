@@ -38,13 +38,8 @@ const getByMass = async (req, res) => {
 
 
 const getByClass = async (req, res) => {
-    try {
-        if (req.params.class) {
-            res.status(202).json({ message: 'dentro getByClass' })
-        }
-    } catch (error) {
-        res.status(400).json({ message: error });
-    }
+    const allLandings = await landingDB.getByClass(req.params.class);
+    res.status(200).json(allLandings); 
 }
 
 
