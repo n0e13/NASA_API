@@ -1,4 +1,4 @@
-const neaAPI = require('../models/nea_api_model');
+const neaBD = require('../models/nea_api_model');
 
 const getByQuery = async (req, res) => {
     if (Object.keys(req.query).length !== 0) {
@@ -12,6 +12,8 @@ const getByQuery = async (req, res) => {
     }
 }
 
+
+
 const getByClass = async (nea_class, res) => {
     try {
         res.status(202).json({ message: 'dentro getByClass' })
@@ -19,6 +21,8 @@ const getByClass = async (nea_class, res) => {
         res.status(400).json({ message: error });
     }
 }
+
+
 
 const getByDate = async (query, res) => {
     if (query.to && query.from) {
@@ -30,32 +34,51 @@ const getByDate = async (query, res) => {
     }
 }
 
-const createNea = async (req, res) => {
-    try {
-        res.status(202).json({ message: 'dentro createNea' })
 
-    } catch (error) {
-        res.status(400).json({ message: error });
+
+const createNea = async (req, res) => {
+    if (Object.keys(req.body).length !== 0) {
+        try {
+            await neaBD.createNea(req.body);
+            res.status(201).json({ message: 'Nea creada correctamente' });
+        }
+        catch (error) {
+            res.status(400).json({ message: error });
+        }
+    } else {
+        res.status(400).json({ message: 'No hay datos para crear una nea' });
     }
 }
+
+
 
 const updateNea = async (req, res) => {
-    try {
-        if (req.params.designation) {
-            res.status(202).json({ message: 'dentro updateNea' })
+    if (Object.keys(req.body).length !== 0) {
+        try {
+            await neaBD.updateNea(req.body);
+            res.status(202).json({ message: 'Nea actualizada correctamente' });
         }
-    } catch (error) {
-        res.status(400).json({ message: error });
+        catch (error) {
+            res.status(400).json({ message: error });
+        }
+    } else {
+        res.status(400).json({ message: 'No hay datos para actualizar una nea' });
     }
 }
 
+
+
 const deleteNea = async (req, res) => {
-    try {
-        if (req.params.designation) {
-            res.status(202).json({ message: 'dentro deleteNea' })
+    if (Object.keys(req.body).length !== 0) {
+        try {
+            await neaBD.deleteNea(req.body);
+            res.status(202).json({ message: 'Nea borrada correctamente' });
         }
-    } catch (error) {
-        res.status(400).json({ message: error });
+        catch (error) {
+            res.status(400).json({ message: error });
+        }
+    } else {
+        res.status(400).json({ message: 'No hay datos para borrar una nea' });
     }
 }
 

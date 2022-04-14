@@ -33,8 +33,14 @@ const getByDate = async () => {
   "orbit_class": "Apollo"
 } */
 // Ejemplo: /astronomy/neas/create
-const createNea = async () => {
-    return 'createNea';
+const createNea = async (nea) => {
+    try {
+        const newNea = new Nea(nea);
+        await Nea.create(newNea);
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
 }
 
 // PUT Para editar un NEA en el sistema. Búsqueda para editar por designation. El objeto a editar tendrá los mismos campos como los documentos proporcionandos en MongoDB como ejemplo.
@@ -51,14 +57,27 @@ const createNea = async () => {
   "orbit_class": "Amor"
 } */
 // Ejemplo: /astronomy/neas/edit
-const updateNea = async () => {
-    return 'updateNea';
+const updateNea = async (nea) => {
+    try {
+        const newNea = Nea(nea);
+        const oldNea = await Nea.findOne({ designation: nea.designation }); 
+        oldNea.overwrite(newNea);
+        oldNea.save();
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
 }
 
 // DELETE Para borrar un NEA del sistema. Búsqueda para borrar por designation.
 // Ejemplo: /astronomy/neas/delete
-const deleteNea = async () => {
-    return 'deleteNea';
+const deleteNea = async (nea) => {
+    try {
+        await Nea.findOneAndDelete({ designation: nea.designation }); 
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
 }
 
 const neaAPI = {

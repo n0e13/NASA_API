@@ -9,8 +9,8 @@ const {
 
 routes.get('', getByQuery);
 routes.post('/create', createNea);
-routes.patch('/edit/:designation', updateNea);
-routes.delete('/delete/:designation', deleteNea);
+routes.patch('/edit', updateNea);
+routes.delete('/delete', deleteNea);
 
 module.exports = routes;
 
