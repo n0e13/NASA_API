@@ -4,35 +4,21 @@ const Landing = require('./landing_schema_model');
 // Ejemplo: /astronomy/landings?minimum_mass=200000​
 const getByMassAprox = async (min_mass) => {
     try {
-        const agg = [
-            {
-                '$project':
-                {
-                    '_id': 0,
-                    'name': 1,
-                    'mass': 1
-                }
-            },
-            {
-                '$match':
-                {
-                    '$expr':
-                    {
-                        '$gte':
-                            [
-                                {
-                                    '$toDecimal': '$mass'
-                                }, min_mass
-                            ]
-                    }
-                }
+        const agg = [{
+            '$project': {
+                '_id': 0,
+                'name': 1,
+                'mass': 1
             }
+        }, {
+            '$match': { '$expr': { '$gte': [{ '$toDecimal': '$mass' }, min_mass] } }
+        }
         ];
-        const allLandings = Landing.aggregate(agg);
+        const allLandings = await Landing.aggregate(agg);
         return allLandings;
     } catch (error) {
-        console.log(err);
-        throw err;
+        console.log(error);
+        throw error;
     }
 }
 
@@ -41,35 +27,21 @@ const getByMassAprox = async (min_mass) => {
 // Ejemplo: /astronomy/landings/mass/200000​
 const getByMass = async (exactMass) => {
     try {
-        const agg = [
-            {
-                '$project':
-                {
-                    '_id': 0,
-                    'name': 1,
-                    'mass': 1
-                }
-            },
-            {
-                '$match':
-                {
-                    '$expr':
-                    {
-                        '$eq':
-                            [
-                                {
-                                    '$toDecimal': '$mass'
-                                }, exactMass
-                            ]
-                    }
-                }
+        const agg = [{
+            '$project': {
+                '_id': 0,
+                'name': 1,
+                'mass': 1
             }
+        }, {
+            '$match': { '$expr': { '$eq': [{ '$toDecimal': '$mass' }, exactMass] } }
+        }
         ];
-        const allLandings = Landing.aggregate(agg);
+        const allLandings = await Landing.aggregate(agg);
         return allLandings;
     } catch (error) {
-        console.log(err);
-        throw err;
+        console.log(error);
+        throw error;
     }
 }
 
@@ -78,34 +50,21 @@ const getByMass = async (exactMass) => {
 // Ejemplo: /astronomy/landings/class/L6​
 const getByClass = async (exactClass) => {
     try {
-        const agg = [
-            {
-                '$project':
-                {
-                    '_id': 0,
-                    'name': 1,
-                    'recclass': 1
-                }
-            },
-            {
-                '$match':
-                {
-                    '$expr':
-                    {
-                        '$eq':
-                            [
-                                '$recclass',
-                                exactClass
-                            ]
-                    }
-                }
+        const agg = [{
+            '$project': {
+                '_id': 0,
+                'name': 1,
+                'recclass': 1
             }
+        }, {
+            '$match': { '$expr': { '$eq': ['$recclass', exactClass] } }
+        }
         ];
-        const allLandings = Landing.aggregate(agg);
+        const allLandings = await Landing.aggregate(agg);
         return allLandings;
     } catch (error) {
-        console.log(err);
-        throw err;
+        console.log(error);
+        throw error;
     }
 }
 
@@ -115,8 +74,41 @@ const getByClass = async (exactClass) => {
 // /astronomy/landings?from=1960
 // /astronomy/landings?to=1990
 // El mismo endpoint deberá ser compatible con las 3 formas
-const getByDate = async () => {
-    return 'getByDate';
+const getByDate = async (fromYear, toYear) => {
+    const agg = [
+        {
+            '$project': {
+                '_id': 0,
+                'name': 1,
+                'mass': 1,
+                'year': {
+                    '$substr': [
+                        '$year', 0, 4
+                    ]
+                }
+            }
+        }
+    ];
+
+    const allLandings = await Landing.aggregate(agg);
+    let inDate = [];
+    await allLandings.forEach(landingItem => {
+        if (fromYear && toYear) {
+            if ((parseInt(landingItem.year) >= parseInt(fromYear)) && (parseInt(landingItem.year) <= parseInt(toYear))) {
+                inDate.push(landingItem);
+            }
+        } else if (fromYear) {
+            if (parseInt(landingItem.year) >= parseInt(fromYear)) {
+                inDate.push(landingItem);
+            }
+        } else {
+            if (parseInt(landingItem.year) <= parseInt(toYear)) {
+                inDate.push(landingItem);
+            }
+        }
+    });
+    
+    return inDate;
 }
 
 

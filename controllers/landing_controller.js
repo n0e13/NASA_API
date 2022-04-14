@@ -21,13 +21,8 @@ const getByMassAprox = async (min_mass, res) => {
 }
 
 const getByDate = async (query, res) => {
-    if (query.to && query.from) {
-        res.status(202).json({ message: 'dentro get by date con to y from' });
-    } else if (query.from) {
-        res.status(202).json({ message: 'dentro get by date con from' });
-    } else {
-        res.status(202).json({ message: 'dentro get by date con to' });
-    }
+    const allLandings = await landingDB.getByDate(parseInt(query.from), parseInt(query.to));
+    res.status(200).json(allLandings);
 }
 
 
