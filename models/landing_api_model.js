@@ -156,8 +156,16 @@ const createLanding = async (landing) => {
   "geolocation": { "latitude": "50.95", "longitude": "31.81667" }
 },
 Ejemplo: /astronomy/landings/edit */
-const updateLanding = async () => {
-    return 'updateLanding';
+const updateLanding = async (landing) => {
+    try {
+        const newLanding = Landing(landing);
+        const oldLanding = await Landing.findOne({ id: landing.id }); 
+        oldLanding.overwrite(newLanding);
+        oldLanding.save();
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
 }
 
 // DELETE Para borrar un landing en el sistema. Búsqueda para borrar por ID.

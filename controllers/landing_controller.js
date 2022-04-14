@@ -38,6 +38,7 @@ const getByDate = async (query, res) => {
 
 const getByMass = async (req, res) => {
     try {
+
         const allLandings = await landingDB.getByMass(parseInt(req.params.mass));
         res.status(200).json(allLandings);
     }
@@ -59,23 +60,32 @@ const getByClass = async (req, res) => {
 
 
 const createLanding = async (req, res) => {
-    try {
-        await landingDB.createLanding(req.body);
-        res.status(201).json({ message: 'Landing creada correctamente' });
-    }
-    catch (error) {
-        res.status(400).json({ message: error });
+    //TODO: Controllar que se introduce un {} para que no de error 
+    if (Object.keys(req.body).length !== 0) {
+        try {
+            await landingDB.createLanding(req.body);
+            res.status(201).json({ message: 'Landing creada correctamente' });
+        }
+        catch (error) {
+            res.status(400).json({ message: error });
+        }
+    } else {
+        res.status(400).json({ message: 'No hay datos para crear una landing' });
     }
 }
 
 
 const updateLanding = async (req, res) => {
-    try {
-        if (req.params.id) {
-            res.status(202).json({ message: 'dentro updateLanding' })
+    if (Object.keys(req.body).length !== 0) {
+        try {
+            await landingDB.updateLanding(req.body);
+            res.status(202).json({ message: 'Landing actualizada correctamente' });
         }
-    } catch (error) {
-        res.status(400).json({ message: error });
+        catch (error) {
+            res.status(400).json({ message: error });
+        }
+    } else {
+        res.status(400).json({ message: 'No hay datos para actualizar una landing' });
     }
 }
 
