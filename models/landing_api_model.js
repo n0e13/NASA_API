@@ -1,4 +1,6 @@
 const Landing = require('./landing_schema_model');
+const myRgx = require('../utils/validateDate');
+const { validate } = require('./nea_schema_model');
 
 // GET para obtener nombre y masa de todos aquellos meteoritos cuya masa sea igual o superior a una masa (gr) dada (con query parameters)​
 // Ejemplo: /astronomy/landings?minimum_mass=200000​
@@ -17,7 +19,6 @@ const getByMassAprox = async (min_mass) => {
         const allLandings = await Landing.aggregate(agg);
         return allLandings;
     } catch (error) {
-        console.log(error);
         throw error;
     }
 }
@@ -40,7 +41,6 @@ const getByMass = async (exactMass) => {
         const allLandings = await Landing.aggregate(agg);
         return allLandings;
     } catch (error) {
-        console.log(error);
         throw error;
     }
 }
@@ -63,7 +63,6 @@ const getByClass = async (exactClass) => {
         const allLandings = await Landing.aggregate(agg);
         return allLandings;
     } catch (error) {
-        console.log(error);
         throw error;
     }
 }
@@ -75,6 +74,17 @@ const getByClass = async (exactClass) => {
 // /astronomy/landings?to=1990
 // El mismo endpoint deberá ser compatible con las 3 formas
 const getByDate = async (fromYear, toYear) => {
+    let fromValidate = false;
+    let toValidate = false;
+
+    if (fromYear && myRgx.regexDate(fromYear)) {
+        fromValidate = true;
+    }
+
+    if (toYear && myRgx.regexDate(toYear)) {
+        toValidate = true;
+    }
+
     try {
         const agg = [
             {
@@ -82,36 +92,37 @@ const getByDate = async (fromYear, toYear) => {
                     '_id': 0,
                     'name': 1,
                     'mass': 1,
-                    'year': {
-                        '$substr': [
-                            '$year', 0, 4
-                        ]
-                    }
+                    'year': 1
                 }
             }
         ];
 
         const allLandings = await Landing.aggregate(agg);
         let inDate = [];
-        await allLandings.forEach(landingItem => {
-            if (fromYear && toYear) {
-                if ((parseInt(landingItem.year) >= parseInt(fromYear)) && (parseInt(landingItem.year) <= parseInt(toYear))) {
-                    inDate.push(landingItem);
-                }
-            } else if (fromYear) {
-                if (parseInt(landingItem.year) >= parseInt(fromYear)) {
-                    inDate.push(landingItem);
-                }
-            } else {
-                if (parseInt(landingItem.year) <= parseInt(toYear)) {
-                    inDate.push(landingItem);
+        allLandings.forEach(landingItem => {
+            if (landingItem.year) {
+                let year = parseInt(landingItem.year.substr(0, 4));
+                if (fromValidate && toValidate) {
+                    if ((year >= fromYear) && (year <= toYear)) {
+                        inDate.push(landingItem);
+                    }
+                } else if (fromYear && toYear && (fromValidate !== toValidate)) {
+                    throw "Formato incorrecto. Usar YYYY";
+                } else if (fromValidate) {
+                    if (year >= fromYear) {
+                        inDate.push(landingItem);
+                    }
+                } else if (toValidate) {
+                    if (year <= toYear) {
+                        inDate.push(landingItem);
+                    }
+                } else {
+                    throw "Formato incorrecto. Usar YYYY";
                 }
             }
         });
-
         return inDate;
     } catch (error) {
-        console.log(error);
         throw error;
     }
 }
@@ -136,7 +147,6 @@ const createLanding = async (landing) => {
         const newLanding = new Landing(landing);
         await Landing.create(newLanding);
     } catch (error) {
-        console.log(error);
         throw error;
     }
 }
@@ -159,11 +169,10 @@ Ejemplo: /astronomy/landings/edit */
 const updateLanding = async (landing) => {
     try {
         const newLanding = Landing(landing);
-        const oldLanding = await Landing.findOne({ id: landing.id }); 
+        const oldLanding = await Landing.findOne({ id: landing.id });
         oldLanding.overwrite(newLanding);
         oldLanding.save();
     } catch (error) {
-        console.log(error);
         throw error;
     }
 }
@@ -172,9 +181,8 @@ const updateLanding = async (landing) => {
 // Ejemplo: /astronomy/landings/delete​
 const deleteLanding = async (landing) => {
     try {
-        await Landing.findOneAndDelete({ id: landing.id }); 
+        await Landing.findOneAndDelete({ id: landing.id });
     } catch (error) {
-        console.log(error);
         throw error;
     }
 }

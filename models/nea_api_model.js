@@ -1,4 +1,5 @@
 const Nea = require('./nea_schema_model');
+const myRgx = require('../utils/validateDate');
 
 // GET para obtener la designación y el período anual en base a la clase orbital del asteroide (con query params)​
 // Ejemplo: /astronomy/neas?class=aten​
@@ -18,7 +19,6 @@ const getByClass = async (orbit) => {
         const allNeas = await Nea.aggregate(agg);
         return allNeas;
     } catch (error) {
-        console.log(error);
         throw error;
     }
 }
@@ -32,8 +32,68 @@ const getByClass = async (orbit) => {
 // YYYY-MM
 // YYYY
 // El endpoint debe ser compatible con los 3 casos
-const getByDate = async () => {
-    return 'getByDate';
+const getByDate = async (fromDate, toDate) => {
+    let fromValidate = false;
+    let toValidate = false;
+
+    if (fromDate
+        && myRgx.regexDate(fromDate)
+        && (fromDate.length === 10
+            || fromDate.length === 7
+            || fromDate.length === 4)) {
+        fromValidate = true;
+    }
+
+    if (toDate
+        && myRgx.regexDate(toDate)
+        && (toDate.length === 10
+            || toDate.length === 7
+            || toDate.length === 4)) {
+        toValidate = true;
+    }
+
+    try {
+        const agg = [
+            {
+                '$project': {
+                    '_id': 0,
+                    'designation': 1,
+                    'discovery_date': 1,
+                    'period_yr': 1
+                }
+            }
+        ];
+
+        const allNeas = await Nea.aggregate(agg);
+        let inDate = [];
+        allNeas.forEach(neaItem => {
+            if (neaItem.discovery_date) {
+
+                let neaDate = neaItem.discovery_date.substr(0, 10);
+
+                if (fromValidate && toValidate) {
+                    if (myRgx.compareDates(fromDate, neaDate) && myRgx.compareDates(neaDate, toDate)) {
+                        inDate.push(neaItem);
+                    }
+                } else if (fromDate && toDate && (fromValidate !== toValidate)) {
+                    throw "Formato incorrecto. Usar YYYY-MM-DD / YYYY-MM / YYYY";
+                } else if (fromValidate) {
+                    if (myRgx.compareDates(fromDate, neaDate)) {
+                        inDate.push(neaItem);
+                    }
+                } else if (toValidate) {
+                    if (myRgx.compareDates(neaDate, toDate)) {
+                        inDate.push(neaItem);
+                    }
+                } else {
+                    throw "Formato incorrecto. Usar YYYY-MM-DD / YYYY-MM / YYYY";
+                }
+            }
+        });
+        return inDate;
+    } catch (error) {
+        throw error;
+    }
 }
 
 // POST Para crear un nuevo NEA en el sistema. El objeto a crear tendrá los mismos campos como los documentos proporcionandos en MongoDB como ejemplo:
@@ -55,7 +115,6 @@ const createNea = async (nea) => {
         const newNea = new Nea(nea);
         await Nea.create(newNea);
     } catch (error) {
-        console.log(error);
         throw error;
     }
 }
@@ -81,7 +140,6 @@ const updateNea = async (nea) => {
         oldNea.overwrite(newNea);
         oldNea.save();
     } catch (error) {
-        console.log(error);
         throw error;
     }
 }
@@ -92,7 +150,6 @@ const deleteNea = async (nea) => {
     try {
         await Nea.findOneAndDelete({ designation: nea.designation });
     } catch (error) {
-        console.log(error);
         throw error;
     }
 }

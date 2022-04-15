@@ -1,4 +1,4 @@
-const neaBD = require('../models/nea_api_model');
+const neaDB = require('../models/nea_api_model');
 
 const getByQuery = async (req, res) => {
     if (Object.keys(req.query).length !== 0) {
@@ -17,7 +17,7 @@ const getByQuery = async (req, res) => {
 const getByClass = async (nea_class, res) => {
     try {
         console.log(nea_class);
-        const allNeas = await neaBD.getByClass(nea_class);
+        const allNeas = await neaDB.getByClass(nea_class);
         res.status(200).json(allNeas);
     }
     catch (error) {
@@ -28,12 +28,12 @@ const getByClass = async (nea_class, res) => {
 
 
 const getByDate = async (query, res) => {
-    if (query.to && query.from) {
-        res.status(202).json({ message: 'dentro get by date con to y from' });
-    } else if (query.from) {
-        res.status(202).json({ message: 'dentro get by date con from' });
-    } else {
-        res.status(202).json({ message: 'dentro get by date con to' });
+    try {
+        const allNeas = await neaDB.getByDate(query.from, query.to);
+        res.status(200).json(allNeas);
+    }
+    catch (error) {
+        res.status(400).json({ message: error });;
     }
 }
 
@@ -42,7 +42,7 @@ const getByDate = async (query, res) => {
 const createNea = async (req, res) => {
     if (Object.keys(req.body).length !== 0) {
         try {
-            await neaBD.createNea(req.body);
+            await neaDB.createNea(req.body);
             res.status(201).json({ message: 'Nea creada correctamente' });
         }
         catch (error) {
@@ -58,7 +58,7 @@ const createNea = async (req, res) => {
 const updateNea = async (req, res) => {
     if (Object.keys(req.body).length !== 0) {
         try {
-            await neaBD.updateNea(req.body);
+            await neaDB.updateNea(req.body);
             res.status(202).json({ message: 'Nea actualizada correctamente' });
         }
         catch (error) {
@@ -74,7 +74,7 @@ const updateNea = async (req, res) => {
 const deleteNea = async (req, res) => {
     if (Object.keys(req.body).length !== 0) {
         try {
-            await neaBD.deleteNea(req.body);
+            await neaDB.deleteNea(req.body);
             res.status(202).json({ message: 'Nea borrada correctamente' });
         }
         catch (error) {
