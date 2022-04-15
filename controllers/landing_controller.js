@@ -1,5 +1,6 @@
 const landingDB = require('../models/landing_api_model');
 
+
 const getByQuery = async (req, res) => {
     if (Object.keys(req.query).length !== 0) {
         if (req.query.minimum_mass) {
