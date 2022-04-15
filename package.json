@@ -1,0 +1,33 @@
+{
+  "name": "nasa_api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon index.js",
+    "generate-docs": "jsdoc -c ./jsdoc.json"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/n0e13/NASA_API.git"
+  },
+  "keywords": [],
+  "author": "n0e",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/n0e13/NASA_API/issues"
+  },
+  "homepage": "https://github.com/n0e13/NASA_API#readme",
+  "dependencies": {
+    "dotenv": "^16.0.0",
+    "express": "^4.17.3",
+    "helmet": "^5.0.2",
+    "mongoose": "^6.2.10",
+    "nodemon": "^2.0.15"
+  },
+  "devDependencies": {
+    "jsdoc": "^3.6.10",
+    "morgan": "^1.10.0"
+  }
+}
