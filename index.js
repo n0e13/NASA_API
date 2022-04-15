@@ -2,7 +2,7 @@ const express = require('express');
 
 const { app: { port } } = require('./configs/env_config');
 const connectMongoDB = require('./configs/mongodb_config');
-const morgan = require('./configs/morgan_config');
+const helmet = require('helmet');
 
 const notFound = require('./middlewares/notFound');
 
@@ -11,10 +11,9 @@ const neaRouter = require('./routes/nea_routes');
 
 const app = express();
 
+app.use(helmet());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
-app.use(morgan(':method / :host / :status / :query / :param / :res[content-length] / :response-time ms / :body'));
 
 app.use('/api/astronomy/landings', landingRouter);
 app.use('/api/astronomy/neas', neaRouter);

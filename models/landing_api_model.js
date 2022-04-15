@@ -1,6 +1,5 @@
 const Landing = require('./landing_schema_model');
 const myRgx = require('../utils/validateDate');
-const { validate } = require('./nea_schema_model');
 
 // GET para obtener nombre y masa de todos aquellos meteoritos cuya masa sea igual o superior a una masa (gr) dada (con query parameters)​
 // Ejemplo: /astronomy/landings?minimum_mass=200000​
