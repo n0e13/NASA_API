@@ -29,11 +29,11 @@ const init = async () => {
     try {
         await connectMongoDB();
         app.listen(port, () => {
-            console.log(`Example app listening at http://localhost:${port}`)
+            // console.log(`Example app listening at http://localhost:${port}`)
         })
     }
     catch (error) {
-        console.log(error);
+        //console.log(error);
     }
 }
 

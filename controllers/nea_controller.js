@@ -16,7 +16,6 @@ const getByQuery = async (req, res) => {
 
 const getByClass = async (nea_class, res) => {
     try {
-        console.log(nea_class);
         const allNeas = await neaDB.getByClass(nea_class);
         res.status(200).json(allNeas);
     }
