@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon index.js",
+    "start": "node index.js",
     "generate-docs": "jsdoc -c ./jsdoc.json"
   },
   "repository": {
@@ -24,10 +24,10 @@
     "express": "^4.17.3",
     "helmet": "^5.0.2",
     "mongoose": "^6.2.10",
-    "nodemon": "^2.0.15"
+    "nodemon": "^2.0.15",
+    "swagger-ui": "^4.10.3"
   },
   "devDependencies": {
-    "jsdoc": "^3.6.10",
-    "morgan": "^1.10.0"
+    "jsdoc": "^3.6.10"
   }
 }
