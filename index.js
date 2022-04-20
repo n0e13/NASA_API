@@ -21,6 +21,7 @@ app.use('/api/astronomy/landings', landingRouter);
 app.use('/api/astronomy/neas', neaRouter);
 
 app.use(notFound);
+
 /**
  * Función inicial que conecta a la BBDD y lanza el servidor
  * @async
@@ -29,11 +30,11 @@ const init = async () => {
     try {
         await connectMongoDB();
         app.listen(port, () => {
-            // console.log(`Example app listening at http://localhost:${port}`)
+            console.log(`Example app listening at http://localhost:${port}`)
         })
     }
     catch (error) {
-        //console.log(error);
+        console.log(error);
     }
 }
 
