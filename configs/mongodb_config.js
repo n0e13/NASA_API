@@ -8,7 +8,7 @@
 const mongoose = require('mongoose');
 
 /** Clave de conexión */
-const { mongo: { mongo_uri } } = require('./env_config');
+const { mongo: { MONGO_URI } } = require('./env_config');
 
 /** 
  * Función asíncrona que conecta a la BBDD de MongoDB 

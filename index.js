@@ -1,6 +1,6 @@
 const express = require('express');
 
-const { app: { port } } = require('./configs/env_config');
+const { app: { PORT } } = require('./configs/env_config');
 const connectMongoDB = require('./configs/mongodb_config');
 const helmet = require('helmet');
 
@@ -8,6 +8,8 @@ const notFound = require('./middlewares/notFound');
 
 const landingRouter = require('./routes/lading_routes');
 const neaRouter = require('./routes/nea_routes');
+
+const port = PORT || 5000;
 
 const app = express();
 
