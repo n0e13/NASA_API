@@ -8,8 +8,6 @@ const {
 } = require('../controllers/nea_controller');
 
 routes.get('', getByQuery);
-
-
 routes.post('/create', createNea);
 routes.put('/edit', updateNea);
 routes.delete('/delete', deleteNea);

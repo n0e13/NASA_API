@@ -10,10 +10,7 @@ const helmet = require('helmet');
 const cors = require('cors');
 const swaggerJsDoc = require('swagger-jsdoc');
 const swaggerUi = require('swagger-ui-express');
-
-
-const swaggerOptions = require('./configs/swagger_config');
-const swaggerDocs = swaggerJsDoc(swaggerOptions);
+const swaggerDocument = require('./configs/swagger.json');
 
 
 // Middlewares
@@ -34,7 +31,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Routes
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use('/api/astronomy/landings', landingRouter);
 app.use('/api/astronomy/neas', neaRouter); 
 

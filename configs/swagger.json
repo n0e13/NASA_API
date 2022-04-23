@@ -1,0 +1,657 @@
+{
+    "swagger": "2.0",
+    "info": {
+      "description": "CRUD para meteroritos y asteroides. Puedes encontrar toda la información aquí [Ejercicio NASA-API](https://github.com/TheBridge-FullStackDeveloper/temario_fullstack_FT_feb22/blob/master/teoria/back/ejercicioNasa.md)",
+      "version": "1.0.2",
+      "title": "NASA API",
+      "contact": {
+        "name": "n0e",
+        "email": "n0e@gmail.com"
+      }
+    },
+    "host": "nasa-api-n0e.herokuapp.com",
+    "basePath": "/api/astronomy",
+    "tags": [
+      {
+        "name": "Landings",
+        "description": "Todo sobre los meteoritos"
+      },
+      {
+        "name": "Neas",
+        "description": "Todo sobre los asteroides"
+      }
+    ],
+    "paths": {
+      "/landings?minimum_mass={minimum_mass}": {
+        "get": {
+          "tags": [
+            "Landings"
+          ],
+          "summary": "Busca por peso mínimo",
+          "description": "Obtiene el nombre y masa de todos aquellos meteoritos cuya masa sea igual o superior a una masa (gr) dada",
+          "operationId": "getByMinMass",
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "name": "minimum_mass",
+              "in": "query",
+              "description": "Peso mínimo en gramos",
+              "required": true,
+              "type": "integer"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Operación correcta"
+            },
+            "400": {
+              "description": "No hay parámetros"
+            }
+          }
+        }
+      },
+      "/landings/mass/{mass}": {
+        "get": {
+          "tags": [
+            "Landings"
+          ],
+          "summary": "Busca por peso exacto",
+          "description": "Obtiene el nombre y masa de uno o más meteoritos cuya masa sea la especificada",
+          "operationId": "getByMass",
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "name": "mass",
+              "in": "path",
+              "description": "Peso exacto en gramos",
+              "required": true,
+              "type": "integer"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Operación correcta"
+            },
+            "400": {
+              "description": "No hay parámetros"
+            }
+          }
+        }
+      },
+      "/landings/class/{class}": {
+        "get": {
+          "tags": [
+            "Landings"
+          ],
+          "summary": "Busca por clase",
+          "description": "Obtiene los nombres y clase de aquellos meteoritos cuya clase sea la registrada",
+          "operationId": "getByClass",
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "name": "class",
+              "in": "path",
+              "description": "Nombre de la clase",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Operación correcta"
+            },
+            "400": {
+              "description": "No hay parámetros"
+            }
+          }
+        }
+      },
+      "/landings?from={from}&to={to}": {
+        "get": {
+          "tags": [
+            "Landings"
+          ],
+          "summary": "Busca entre varias fechas",
+          "description": "Obtiene el nombre, la masa y la fecha de todos los meteoritos caídos entre determinadas fechas",
+          "operationId": "getByDateFromTo",
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "name": "from",
+              "in": "query",
+              "description": "Año desde el que empieza la búsqueda",
+              "required": true,
+              "type": "integer"
+            },
+            {
+              "name": "to",
+              "in": "query",
+              "description": "Año en el que acaba la búsqueda",
+              "required": true,
+              "type": "integer"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Operación correcta"
+            },
+            "400": {
+              "description": "Formato incorrecto. Usar YYYY"
+            }
+          }
+        }
+      },
+      "/landings?from={from}": {
+        "get": {
+          "tags": [
+            "Landings"
+          ],
+          "summary": "Busca desde una fecha",
+          "description": "Obtiene el nombre, la masa y la fecha de todos los meteoritos caídos desde determinada fecha",
+          "operationId": "getByDateFrom",
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "name": "from",
+              "in": "query",
+              "description": "Año desde el que empieza la búsqueda",
+              "required": true,
+              "type": "integer"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Operación correcta"
+            },
+            "400": {
+              "description": "Formato incorrecto. Usar YYYY"
+            }
+          }
+        }
+      },
+      "/landings?to={to}": {
+        "get": {
+          "tags": [
+            "Landings"
+          ],
+          "summary": "Busca hasta una fecha",
+          "description": "Obtiene el nombre, la masa y la fecha de todos los meteoritos caídos hasta determinada fecha",
+          "operationId": "getByDateTo",
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "name": "to",
+              "in": "query",
+              "description": "Año en el que acaba la búsqueda",
+              "required": true,
+              "type": "integer"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Operación correcta"
+            },
+            "400": {
+              "description": "Formato incorrecto. Usar YYYY"
+            }
+          }
+        }
+      },
+      "/landings/create": {
+        "post": {
+          "tags": [
+            "Landings"
+          ],
+          "summary": "Registrar nueva landing",
+          "description": "Crea un nuevo landing en el sistema.",
+          "operationId": "createLanding",
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "name": "body",
+              "in": "body",
+              "description": "Introduce los datos del meteorito",
+              "required": true,
+              "schema": {
+                "$ref": "#/definitions/Landings"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Landing creada correctamente"
+            },
+            "400": {
+              "description": "No hay datos para crear una landing"
+            }
+          }
+        }
+      },
+      "/landings/edit": {
+        "put": {
+          "tags": [
+            "Landings"
+          ],
+          "summary": "Editar landing",
+          "description": "Edita una landing en el sistema. Busca por su id",
+          "operationId": "updateLanding",
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "name": "body",
+              "in": "body",
+              "description": "Introduce los datos del meteorito",
+              "required": true,
+              "schema": {
+                "$ref": "#/definitions/Landings"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Landing actualizada correctamente"
+            },
+            "400": {
+              "description": "No hay datos para actualizar una landing"
+            }
+          }
+        }
+      },
+      "/landings/delete": {
+        "delete": {
+          "tags": [
+            "Landings"
+          ],
+          "summary": "Borra una landing",
+          "description": "Borra una landing del sistema. Busca por su id",
+          "operationId": "deleteLanding",
+          "parameters": [
+            {
+              "name": "body",
+              "in": "body",
+              "description": "Introduce el id del meteorito",
+              "required": true,
+              "schema": {
+                "$ref": "#/definitions/deleteLanding"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Landing borrada correctamente"
+            },
+            "400": {
+              "description": "No hay datos para borrar una landing"
+            }
+          }
+        }
+      },
+      "/neas?class={class}": {
+        "get": {
+          "tags": [
+            "Neas"
+          ],
+          "summary": "Busca por clase",
+          "description": "Obtiene la designación y el período anual en base a la clase orbital del asteroide",
+          "operationId": "getNeaByClass",
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "name": "class",
+              "in": "query",
+              "description": "Nombre de la clase",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Operación correcta"
+            },
+            "400": {
+              "description": "No hay parámetros"
+            }
+          }
+        }
+      },
+      "/neas?from={from}&to={to}": {
+        "get": {
+          "tags": [
+            "Neas"
+          ],
+          "summary": "Busca entre varias fechas",
+          "description": "Obtiene la designación, la fecha y el período anual de todos los asteroides entre determinadas fechas",
+          "operationId": "getNeaByDateFromTo",
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "name": "from",
+              "in": "query",
+              "description": "Año desde el que empieza la búsqueda",
+              "required": true,
+              "type": "integer"
+            },
+            {
+              "name": "to",
+              "in": "query",
+              "description": "Año en el que acaba la búsqueda",
+              "required": true,
+              "type": "integer"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Operación correcta"
+            },
+            "400": {
+              "description": "Formato incorrecto. Usar YYYY-MM-DD o YYYY-MM o YYYY"
+            }
+          }
+        }
+      },
+      "/neas?from={from}": {
+        "get": {
+          "tags": [
+            "Neas"
+          ],
+          "summary": "Busca desde una fecha",
+          "description": "la designación, la fecha y el período anual de todos los asteroides desde determinada fecha",
+          "operationId": "getNeaByDateFrom",
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "name": "from",
+              "in": "query",
+              "description": "Año desde el que empieza la búsqueda",
+              "required": true,
+              "type": "integer"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Operación correcta"
+            },
+            "400": {
+              "description": "Formato incorrecto. Usar YYYY"
+            }
+          }
+        }
+      },
+      "/neas?to={to}": {
+        "get": {
+          "tags": [
+            "Neas"
+          ],
+          "summary": "Busca hasta una fecha",
+          "description": "Obtiene la designación, la fecha y el período anual de todos los asteroides hasta determinada fecha",
+          "operationId": "getNeaByDateTo",
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "name": "to",
+              "in": "query",
+              "description": "Año en el que acaba la búsqueda",
+              "required": true,
+              "type": "integer"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Operación correcta"
+            },
+            "400": {
+              "description": "Formato incorrecto. Usar YYYY"
+            }
+          }
+        }
+      },
+      "/neas/create": {
+        "post": {
+          "tags": [
+            "Neas"
+          ],
+          "summary": "Registrar nuevo nea",
+          "description": "Crea un nuevo nea en el sistema.",
+          "operationId": "createNea",
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "name": "body",
+              "in": "body",
+              "description": "Introduce los datos del meteorito",
+              "required": true,
+              "schema": {
+                "$ref": "#/definitions/Neas"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Nea creado correctamente"
+            },
+            "400": {
+              "description": "No hay datos para crear un nea"
+            }
+          }
+        }
+      },
+      "/neas/edit": {
+        "put": {
+          "tags": [
+            "Neas"
+          ],
+          "summary": "Editar nea",
+          "description": "Edita un nea en el sistema. Busca por su designation",
+          "operationId": "updateNea",
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "name": "body",
+              "in": "body",
+              "description": "Introduce los datos del meteorito",
+              "required": true,
+              "schema": {
+                "$ref": "#/definitions/Neas"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Nea actualizado correctamente"
+            },
+            "400": {
+              "description": "No hay datos para actualizar un nea"
+            }
+          }
+        }
+      },
+      "/neas/delete": {
+        "delete": {
+          "tags": [
+            "Neas"
+          ],
+          "summary": "Borra un nea",
+          "description": "Borra un nea del sistema. Busca por su designation",
+          "operationId": "deleteNea",
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "name": "body",
+              "in": "body",
+              "description": "Introduce la designation del meteorito",
+              "required": true,
+              "schema": {
+                "$ref": "#/definitions/deleteNea"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Nea borrada correctamente"
+            },
+            "400": {
+              "description": "No hay datos para borrar un nea"
+            }
+          }
+        }
+      }
+    },
+    "definitions": {
+      "Landings": {
+        "type": "object",
+        "required": [
+          "name",
+          "id",
+          "nametype",
+          "recclass",
+          "mass",
+          "fall",
+          "year",
+          "reclat",
+          "reclong",
+          "geolocation",
+          "latitude",
+          "longitude"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string"
+          },
+          "nametype": {
+            "type": "string"
+          },
+          "recclass": {
+            "type": "string"
+          },
+          "mass": {
+            "type": "string"
+          },
+          "fall": {
+            "type": "string"
+          },
+          "year": {
+            "type": "string"
+          },
+          "reclat": {
+            "type": "string"
+          },
+          "reclong": {
+            "type": "string"
+          },
+          "geolocation": {
+            "type": "object",
+            "properties": {
+              "latitude": {
+                "type": "string"
+              },
+              "longitude": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      "Neas": {
+        "type": "object",
+        "required": [
+          "designation",
+          "discovery_date",
+          "h_mag",
+          "moid_au",
+          "q_au_1",
+          "q_au_2",
+          "period_yr",
+          "i_deg",
+          "pha",
+          "orbit_class"
+        ],
+        "properties": {
+          "designation": {
+            "type": "string"
+          },
+          "discovery_date": {
+            "type": "string"
+          },
+          "h_mag": {
+            "type": "string"
+          },
+          "moid_au": {
+            "type": "string"
+          },
+          "q_au_1": {
+            "type": "string"
+          },
+          "q_au_2": {
+            "type": "string"
+          },
+          "period_yr": {
+            "type": "string"
+          },
+          "i_deg": {
+            "type": "string"
+          },
+          "pha": {
+            "type": "string"
+          },
+          "orbit_class": {
+            "type": "string"
+          }
+        }
+      },
+      "deleteLanding": {
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        }
+      },
+      "deleteNea": {
+        "type": "object",
+        "required": [
+          "designation"
+        ],
+        "properties": {
+          "designation": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
